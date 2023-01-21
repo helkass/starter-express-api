@@ -10,11 +10,12 @@ const createItem = (req, res) => {
                 status: false,
                 message: err.message
             })
-            res.status(201).json({
-                status: true,
-                message: "Item hes been created",
-                data: data
-            })
+            // res.status(201).json({
+            //     status: true,
+            //     message: "Item hes been created",
+            //     data: data
+            // })
+            res.send(dta)
         })
     } catch (error) {
         res.status(500).json({
@@ -39,7 +40,8 @@ const getAllItems = async (req, res) =>{
         }else {
             items = await Item.find()
         }
-        res.status(200).json(items)
+        // res.status(200).json(items)
+        res.send(items)
     } catch (error) {
         res.status(500).json({
             status: false,
@@ -67,7 +69,8 @@ const getItemById = (req, res) => {
 
     try {
         Item.findById(id).then(data => {
-            res.status(200).json(data)
+            // res.status(200).json(data)
+            res.send(data)
         }).catch(err => {
             res.status(404).json({
                 status: false,

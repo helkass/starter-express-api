@@ -18,7 +18,8 @@ router.get('/', async (req,res)=> {
                 updatedAt: item.updatedAt,
             }
         })
-        res.status(200).json(newData)
+        // res.status(200).json(newData);
+        res.send(newData)
     } catch (error) {
         res.status(404).json({message: "data not found!"})
     }

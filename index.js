@@ -38,7 +38,12 @@ app.get('/', (req, res) => {
   res.send("server is running!")
 })
 
-app.use("/api", orderRoute);
+//Routes go here
+// app.all('*', (req,res) => {
+//   res.json({"every thing":"is awesome"})
+// })
+
+app.use("/api/order", orderRoute);
 app.use("/api/admin", adminRoute);
 app.use("/api/blog", blogRoute);
 app.use("/api/item", itemRoute);
