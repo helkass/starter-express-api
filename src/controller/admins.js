@@ -21,7 +21,7 @@ const createAdmin = async (req, res)=> {
     
     try {
         const saved = await newAdmin.save();
-        res.status(200).json({
+        res.send({
             status: true,
             message: "register success",
             data: saved
@@ -39,8 +39,7 @@ const createAdmin = async (req, res)=> {
 // GET ALL ADMIN
 const getAllAdmins = async (req, res)=> {
     try {
-        const response = await Admin.find();
-        res.status(200).json(response.data);
+        Admin.find().then(response => res.send(response)).catch(error => res.send(error))
     } catch (error) {
         return res.status(500).json({
             status: false,
@@ -79,17 +78,20 @@ const loginAdmin = async (req, res) => {
       );
   
       const { password, ...others } = admin._doc;
-      res.status(200).json({ ...others, accessToken });
+      res.send({ ...others, accessToken });
     } catch (error) {
       res.status(500).json(error);
     }
   }
 
-const deleteAdmin = async (req, res) => {
+const deleteAdmin = (req, res) => {
     const id = req.params.id;
     try {
-        const response = await Admin.findByIdAndDelete(id);
-        res.status(200).json(response);
+        Admin.findByIdAndDelete(id).then(response => res.send({
+            status: true,
+            message: "delete success",
+            data: []
+        }))
     } catch (error) {
         res.status(500).json(error);
     }

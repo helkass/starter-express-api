@@ -1,10 +1,10 @@
 const Blog = require("../models/blog");
 
 // GET ALLL BLOGS
-const getAllBlogs = async (req, res) =>{
+const getAllBlogs = (req, res) =>{
     try {
-        await Blog.find().then(response => {
-            res.status(200).json(response)
+        Blog.find().then(response => {
+            res.send(response)
         })
     } catch (error) {
         res.status(500).json({
@@ -26,7 +26,7 @@ const createBlog = (req, res) => {
                 message: err.message
             })
 
-            res.status(201).json({
+            res.send({
                 status: true,
                 message: "Blog created",
                 data: data
@@ -47,7 +47,7 @@ const getBlogById = (req, res) => {
 
     try {
         Blog.findById(id).then(data => {
-            res.status(200).json(data)
+            res.send(data)
         }).catch(err => {
             res.status(404).json({
                 status: false,

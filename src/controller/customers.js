@@ -6,19 +6,12 @@ const jwt = require("jsonwebtoken");
 const getAllCustomers = (req, res) => {
     try {
         Customer.find().then(data => {
-            res.status(200).json(data)
+            res.send(data)
         }).catch(err => {
-            res.status(400).json({
-                status: false,
-                message: err.message
-            })
+            res.send(err)
         })
     } catch (error) {
-        res.status(500).json({
-            status: false,
-            message: error.message,
-            data: []
-        })
+        res.send(error);
     }
 }
 
@@ -27,8 +20,9 @@ const getCustomer = async (req, res) => {
     const id = req.params.id;
     
     try {
-        const response = await Customer.findById(id);
-        res.status(200).json(response);
+        Customer.findById(id)
+            .then(response => res.send(response))
+            .catch(err => console.log(err))
     } catch (error) {
         res.status(500).json(error);
     }
@@ -37,13 +31,9 @@ const getCustomer = async (req, res) => {
 // REGISTER
 const createCustomer = async (req, res) => {
 
-    if(!req.body) return res.status(400).json({message: "form data not allowed!"})
+    if(!req.body) return res.send({message : "please enter the data completely"})
 
     const validate = await Customer.findOne({email: req.body.email});
-
-    validate && res.status(400).json({
-        message: "email has already used!"
-    });
 
     const newCustomer = new Customer({
         fullname: req.body.fullname,
@@ -59,15 +49,25 @@ const createCustomer = async (req, res) => {
         profilePic: req.body.profilePic,
     })
     // check alredy email
-    if(validate) return res.status(400).json({message: "email already exist!"})
+    if(validate) return res.status(400).json({
+        status: false,
+        message: "email already exist!"
+    });
     
     try {
         const saved = await newCustomer.save();
-        res.status(200).json({
-            status: true,
-            message: "register success",
-            data: saved
-        })
+
+        const accessToken = jwt.sign(
+            {
+              email: saved.email,
+              password: saved.password,
+            },
+            process.env.SECRET,
+            { expiresIn: "1d" }
+          );
+
+        const {password, ...others} = saved._doc;
+        res.send({...others, accessToken});
     } catch (error) {
         res.status(500).json({
             status: false,
@@ -102,7 +102,7 @@ const loginCustomer = async (req, res) => {
         );
     
         const { password, ...others } = customer._doc
-        res.status(200).json({ ...others, accessToken });
+        res.send({ ...others, accessToken, status: true });
       } catch (error) {
         res.status(500).json(error);
       }
@@ -113,7 +113,7 @@ const deleteCustomer = async (req, res) => {
 
     try {
         const response = await Customer.findByIdAndDelete(id);
-        res.status(200).json(response);
+        res.send(response);
     } catch (error) {
         res.status(500).json(error)
     }

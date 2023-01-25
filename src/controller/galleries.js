@@ -4,7 +4,7 @@ const Gallery = require("../models/gallery");
 const getAllGalleries = async (req, res) =>{
     try {
         await Gallery.find().then(response => {
-            res.status(200).json(response)
+            res.send(response);
         })
     } catch (error) {
         res.status(500).json({
@@ -25,12 +25,11 @@ const createGallery = (req, res) => {
                 status: false,
                 message: err.message
             })
-
             res.status(201).json({
                 status: true,
                 message: "Gallery has been created",
                 data: data
-            })
+            });
         })
     } catch (error) {
         res.status(500).json({
@@ -47,7 +46,7 @@ const getGalleryById = (req, res) => {
 
     try {
         Gallery.findById(id).then(data => {
-            res.status(200).json(data)
+            res.send(data);
         }).catch(err => {
             res.status(404).json({
                 status: false,

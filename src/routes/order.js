@@ -40,17 +40,9 @@ router.post('/charge', async (req, res)=> {
         }
 
         Order.create(dataOrder).then(data => {
-            res.status(200).json({
-                status: true,
-                message: "success order",
-                data: data
-            })
+            res.send(data)
         }).catch(err => {
-            res.status(500).json({
-                status: false,
-                message: "order failure"+ err.message,
-                data:[]
-            })
+            res.send(err)
         })
     })
     .catch((e)=>{
@@ -67,17 +59,13 @@ router.post('/notification', (req, res) => {
 
         Order.findByIdAndUpdate({_id:order_id, response_midtrans: responseMidtrans})
             .then(()=> {
-                res.status(201).json({
+                res.send({
                     status: true,
                     message: "success update status transaction",
                     data: []
                 })
             }).catch(err => {
-                res.status(400).json({
-                    status: false,
-                    message: "update failure",
-                    data: []
-                })
+                res.send(err)
             })
     })
 })
@@ -104,10 +92,10 @@ router.get('/:customerId', (req, res, next) => {
                     updatedAt: item.updatedAt,
                 }});
 
-            res.status(200).json(newOrders);
+            res.send(newOrders);
         })
     } catch (error) {
-        res.status(404).json({message: "order not found!"})
+        res.send({message: "order not found!"})
     }
 })
 
@@ -120,7 +108,7 @@ router.get('/status/:order_id', (req, res) => {
 
             Order.findByIdAndUpdate(req.params.order_id,{response_midtrans: responseMidtrans}, function (err, data){
                 if(err){
-                    res.status(400).json({error: "update failed"+ err.message})
+                    res.send({error: "update failed" + err.message})
                 }else{
                     let setData = {
                         _id : data._id,
@@ -136,7 +124,7 @@ router.get('/status/:order_id', (req, res) => {
             })
 
         }).catch(err => {
-            res.status(500).json({
+            res.send({
                 status: false,
                 message: "check status falied"+ err.message,
                 data: []
