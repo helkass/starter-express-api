@@ -1,88 +1,57 @@
 const Blog = require("../models/blog");
 
 // GET ALLL BLOGS
-const getAllBlogs = (req, res) =>{
-    try {
-        Blog.find().then(response => {
-            res.send(response)
-        })
-    } catch (error) {
-        res.status(500).json({
-            status: false,
-            message: error.message,
-            data: []
-        })
-    }
-}
+const getAllBlogs = async (req, res) => {
+   try {
+      const blogs = await Blog.find();
+      res.json(blogs);
+   } catch (error) {
+      res.status(500).json({ message: "something went wrong!" });
+   }
+};
 
 // CREATE BLOG
 const createBlog = (req, res) => {
-    const formData = req.body;
+   const formData = req.body;
 
-    try {
-        Blog.create(formData, function(err, data){
-            if(err) res.status(400).json({
-                status: false,
-                message: err.message
-            })
-
-            res.send({
-                status: true,
-                message: "Blog created",
-                data: data
-            })
-        })
-    } catch (error) {
-        res.status(500).json({
-            status: false,
-            message: error.message,
-            data: []
-        })
-    }
-}
+   try {
+      Blog.create(formData, function (err, data) {
+         if (err) {
+            res.status(400).json({ message: "something went wrong!" });
+         } else {
+            res.status(201).json(data);
+         }
+      });
+   } catch (error) {
+      res.status(500).json({ message: "something went wrong!" });
+   }
+};
 
 // GET BLOG BY ID
-const getBlogById = (req, res) => {
-    const id = req.params.id
+const getBlogById = async (req, res) => {
+   const id = req.params.id;
 
-    try {
-        Blog.findById(id).then(data => {
-            res.send(data)
-        }).catch(err => {
-            res.status(404).json({
-                status: false,
-                message: err.message
-            })
-        })
-    } catch (error) {
-        res.status(500).json({
-            status: false,
-            data: []
-        })
-    }
-}
+   try {
+      const blog = await Blog.findById(id);
+      res.status(200).json(blog);
+   } catch (error) {
+      res.status(500).json({ message: "something went wrong!" });
+   }
+};
 
-const deleteBlog = (req, res) => {
-    const id = req.params.id;
+const deleteBlog = async (req, res) => {
+   const id = req.params.id;
 
-    try {
-        Blog.findByIdAndDelete(id).then(() =>{
-            res.status(200).json({
-                status: true,
-                message: "Blog has been deleted"
-            })
-        })
-    } catch (error) {
-        res.status(500).json({
-            status: false,
-            mesage: error.message,
-            data: []
-        })
-    }
-}
+   try {
+      await Blog.findByIdAndDelete(id);
+      res.json({ message: "Delete successfully!" });
+   } catch (error) {
+      res.status(500).json({ message: "something went wrong!" });
+   }
+};
 module.exports = {
-    getAllBlogs,
-    createBlog,
-    getBlogById,
-    deleteBlog
-}
+   getAllBlogs,
+   createBlog,
+   getBlogById,
+   deleteBlog,
+};

@@ -1,87 +1,58 @@
 const Gallery = require("../models/gallery");
 
 // GET ALL GALLERIES
-const getAllGalleries = async (req, res) =>{
-    try {
-        await Gallery.find().then(response => {
-            res.send(response);
-        })
-    } catch (error) {
-        res.status(500).json({
-            status: false,
-            message: error.message,
-            data: []
-        })
-    }
-}
+const getAllGalleries = async (req, res) => {
+   try {
+      const galleries = await Gallery.find();
+
+      res.json(galleries);
+   } catch (error) {
+      res.status(500).json({
+         message: "Somthing wenty wrong!",
+      });
+   }
+};
 
 // CREATE
 const createGallery = (req, res) => {
-    const formData = req.body;
+   const formData = req.body;
 
-    try {
-        Gallery.create(formData, function(err, data){
-            if(err) res.status(400).json({
-                status: false,
-                message: err.message
-            })
-            res.status(201).json({
-                status: true,
-                message: "Gallery has been created",
-                data: data
-            });
-        })
-    } catch (error) {
-        res.status(500).json({
-            status: false,
-            message: error.message,
-            data: []
-        })
-    }
-}
+   try {
+      Gallery.create(formData, function (err, data) {
+         if (err) return res.status(400).json({ message: err.message });
+
+         res.status(201).json(data);
+      });
+   } catch (error) {
+      res.status(500).json({ message: "Something went Wrong!" });
+   }
+};
 
 // GET BLOG BY ID
-const getGalleryById = (req, res) => {
-    const id = req.params.id
+const getGalleryById = async (req, res) => {
+   const id = req.params.id;
 
-    try {
-        Gallery.findById(id).then(data => {
-            res.send(data);
-        }).catch(err => {
-            res.status(404).json({
-                status: false,
-                message: err.message
-            })
-        })
-    } catch (error) {
-        res.status(500).json({
-            status: false,
-            data: []
-        })
-    }
-}
+   try {
+      const gallery = await Gallery.findById(id);
+      res.status(200).json(gallery);
+   } catch (error) {
+      res.status(500).json({ message: "something went wrong!" });
+   }
+};
 
-const deleteGallery = (req, res) => {
-    const id = req.params.id;
+const deleteGallery = async (req, res) => {
+   const id = req.params.id;
 
-    try {
-        Gallery.findByIdAndDelete(id).then(() =>{
-            res.status(200).json({
-                status: true,
-                message: "Gallery has been deleted"
-            })
-        })
-    } catch (error) {
-        res.status(500).json({
-            status: false,
-            mesage: error.message,
-            data: []
-        })
-    }
-}
+   try {
+      const gallery = await Gallery.findByIdAndDelete(id);
+      res.json({ message: "Deelete successfully!" });
+   } catch (error) {
+      res.status(500).json({ message: "Something went wrong!" });
+   }
+};
 module.exports = {
-    getAllGalleries,
-    createGallery,
-    getGalleryById,
-    deleteGallery
-}
+   getAllGalleries,
+   createGallery,
+   getGalleryById,
+   deleteGallery,
+};

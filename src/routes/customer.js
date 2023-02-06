@@ -1,17 +1,21 @@
 const router = require("express").Router();
-const bodyparser = require('body-parser');
-const urlencoded = bodyparser.urlencoded({extended: false});
+const { verifyToken } = require("../middleware/verifyToken");
+const {
+   getAllCustomers,
+   createCustomer,
+   loginCustomer,
+   deleteCustomer,
+   getCustomer,
+} = require("../controller/customers");
 
-const {getAllCustomers, createCustomer, loginCustomer, deleteCustomer, getCustomer} = require("../controller/customers");
+router.get("/", getAllCustomers);
 
-router.get('/', getAllCustomers);
+router.post("/register", createCustomer);
 
-router.post('/register', createCustomer);
+router.get("/:id", getCustomer);
 
-router.get('/:id', getCustomer);
+router.post("/login", loginCustomer);
 
-router.post('/login',  loginCustomer);
-
-router.delete('/delete/:id', deleteCustomer);
+router.delete("/delete/:id", deleteCustomer);
 
 module.exports = router;
