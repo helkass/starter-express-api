@@ -91,7 +91,7 @@ const loginCustomer = async (req, res) => {
       const originalPassword = hashedPassword.toString(CryptoJS.enc.Utf8);
 
       // compare password
-      const checkPassword = originalPassword != req.body.password;
+      const checkPassword = originalPassword !== req.body.password;
 
       if (checkPassword) {
          return res.status(404).json({
