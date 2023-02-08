@@ -28,7 +28,9 @@ const getOrders = async (req, res) => {
 const getOrderByCustomer = async (req, res) => {
    const { id } = req.params;
    try {
-      const response = await Order.find({ customerId: id });
+      const response = await Order.find({ customerId: id }).sort({
+         createdAt: -1,
+      });
 
       // FORMAT RESPONSE_MIDTRANS FROM JSON TO STRING
       const newData = response.map((item) => {
