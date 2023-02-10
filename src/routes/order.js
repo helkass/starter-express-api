@@ -7,6 +7,7 @@ const {
    orderStatus,
    deleteOrder,
    getOrderByCustomer,
+   updateStatusProccessOrder,
 } = require("../controller/orders");
 
 //GET ALL ORDER
@@ -24,6 +25,8 @@ router.post("/notification", notificationMidtrans);
 // GET STATUS TRANSACTION BY ORDER
 //  UPDATE ONLY RESPONSE_MIDTRANS
 router.get("/status/:order_id", orderStatus);
+
+router.put("/status/process/:id", updateStatusProccessOrder);
 
 router.delete("/delete/:id", deleteOrder);
 

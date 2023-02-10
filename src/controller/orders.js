@@ -11,6 +11,7 @@ const getOrders = async (req, res) => {
          return {
             _id: item._id,
             customerId: item.customerId,
+            customer_name: item?.customer_name,
             products: item.products,
             response_midtrans: JSON.parse(item.response_midtrans),
             status: item.status,
@@ -37,6 +38,7 @@ const getOrderByCustomer = async (req, res) => {
          return {
             _id: item._id,
             customerId: item.customerId,
+            customer_name: item?.customer_name,
             products: item.products,
             response_midtrans: JSON.parse(item.response_midtrans),
             status: item.status,
@@ -59,6 +61,7 @@ const createOrder = async (req, res) => {
          const dataOrder = {
             _id: chargeResponse.order_id,
             customerId: formData.customerId,
+            customer_name: formData?.customer_name,
             products: formData.products,
             response_midtrans: JSON.stringify(chargeResponse),
          };
@@ -102,9 +105,17 @@ const notificationMidtrans = async (req, res) => {
       });
 };
 
+// update process status for admin while product on process delivery
+const updateStatusProccessOrder = async (req, res) => {
+   const { id } = req.params;
+
+   Order.findByIdAndUpdate(id, { status: "accepted" })
+      .then((res) => res.send(res))
+      .catch((err) => res.send(err));
+};
+
 // CHECK ORDER STATUS FOR DEVELOPMENT PROJECT
 // UPADTE STATUS AND RESPONSE MIDTRANS WHILE RESPONSE MIDTRANS CHANGE
-
 const orderStatus = async (req, res) => {
    const { order_id } = req.params;
    coreApi.transaction
@@ -114,7 +125,6 @@ const orderStatus = async (req, res) => {
 
          Order.findByIdAndUpdate(
             order_id,
-            // { status: "accepted" },
             { response_midtrans: responseMidtrans },
             function (err, data) {
                if (err) {
@@ -124,6 +134,7 @@ const orderStatus = async (req, res) => {
                      _id: data._id,
                      customerId: data.customerId,
                      products: data.products,
+                     customer_name: data?.customer_name,
                      response_midtrans: JSON.parse(data.response_midtrans),
                      status: data.status,
                      createdAt: data.createdAt,
@@ -156,4 +167,5 @@ module.exports = {
    orderStatus,
    deleteOrder,
    getOrderByCustomer,
+   updateStatusProccessOrder,
 };
