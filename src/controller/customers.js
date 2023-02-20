@@ -94,9 +94,8 @@ const loginCustomer = async (req, res) => {
       const checkPassword = originalPassword !== req.body.password;
 
       if (checkPassword) {
-         return res.status(404).json({
+         return res.sendStatus(404).send({
             message: "Invalid password",
-            checkPassword
          });
       }
 

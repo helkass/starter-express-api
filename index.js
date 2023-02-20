@@ -9,6 +9,7 @@ const blogRoute = require("./src/routes/blog");
 const itemRoute = require("./src/routes/item");
 const customerRoute = require("./src/routes/customer");
 const galleryRoute = require("./src/routes/gallery");
+const bodyParser = require("body-parser");
 
 const app = express();
 dotenv.config();
@@ -20,13 +21,13 @@ mongoose
    .then(() => console.log("db connected"))
    .catch((err) => console.log(err));
 
-app.use(express.json());
+app.use(bodyParser.json());
 
 app.use((req, res, next) => {
    res.setHeader(
       "Access-Control-Allow-Origin",
-      "*",
-      "https://horizon-mern-vercel.vercel.app/"
+      "*"
+      // "https://horizon-mern-vercel.vercel.app/"
    );
    res.setHeader(
       "Access-Control-Allow-Methods",
@@ -39,14 +40,34 @@ app.use((req, res, next) => {
 // cors options while development
 // if client on mode productions or deploy, origin set a valid url client for unblocked cores and policy
 // * all data cant used method
-const corsOptions = {
-   origin: ["https://horizon-mern-vercel.vercel.app/", "*"],
-   optionSuccessStatus: 200,
-};
+const corsOptions = [
+   "https://horizon-mern-vercel.vercel.app/",
+   "https://horizon-mern-vercel-git-main-helkass.vercel.app/",
+];
 
-app.use(cors(corsOptions));
-app.use(express.json({ limit: "50mb" }));
-app.use(express.urlencoded({ limit: "50mb", extended: false }));
+// handling permission and policy
+// app.use(cors(corsOptions));
+
+app.use((req, res, next) => {
+   if (corsOptions.indexOf(req.headers.origin) !== -1) {
+      res.header("Access-Control-Allow-Origin", req.headers.origin);
+      res.header(
+         "Access-Control-Allow-Headers",
+         "Origin, X-Requested-With, Content-Type, Acccept"
+      );
+   }
+   next();
+});
+
+// handling file for request
+app.use(bodyParser.json());
+app.use(
+   bodyParser.urlencoded({
+      limit: "500mb",
+      extended: true,
+      parameterLimit: 5000000,
+   })
+);
 
 app.listen(PORT, () => {
    console.log(`backend is running on port ${PORT}`);
