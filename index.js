@@ -26,6 +26,7 @@ app.use(bodyParser.json());
 app.use((req, res, next) => {
    res.setHeader(
       "Access-Control-Allow-Origin",
+      "*",
       "https://horizon-mern-vercel-git-main-helkass.vercel.app/"
    );
    res.setHeader(
@@ -40,7 +41,7 @@ app.use((req, res, next) => {
 // if client on mode productions or deploy, origin set a valid url client for unblocked cores and policy
 // * all data cant used method
 const corsOptions = {
-   origin: "https://horizon-mern-vercel-git-main-helkass.vercel.app/",
+   origin: ["https://horizon-mern-vercel-git-main-helkass.vercel.app/", "*"],
    optionSuccessStatus: 200,
 };
 
