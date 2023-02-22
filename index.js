@@ -42,11 +42,7 @@ app.use((req, res, next) => {
 // if client on mode productions or deploy, origin set a valid url client for unblocked cores and policy
 // * all data cant used method
 const corsOptions = {
-   origin: [
-      "https://horizon-mern-vercel.vercel.app/",
-      "https://horizon-mern-vercel-git-main-helkass.vercel.app/",
-      "*",
-   ],
+   origin: "https://horizon-mern-vercel-git-main-helkass.vercel.app/",
    optionSuccessStatus: 200,
 };
 
