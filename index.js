@@ -23,19 +23,19 @@ mongoose
 
 app.use(bodyParser.json());
 
-app.use((req, res, next) => {
-   res.setHeader(
-      "Access-Control-Allow-Origin",
-      "*"
-      // "https://horizon-mern-vercel.vercel.app/"
-   );
-   res.setHeader(
-      "Access-Control-Allow-Methods",
-      "GET, POST, DELETE, PUT, PATCH, OPTION"
-   );
-   res.setHeader("Access-Control-Allow-Methods", "Content-Type, Authorization");
-   next();
-});
+// app.use((req, res, next) => {
+//    res.setHeader(
+//       "Access-Control-Allow-Origin",
+//       "*"
+//       // "https://horizon-mern-vercel.vercel.app/"
+//    );
+//    res.setHeader(
+//       "Access-Control-Allow-Methods",
+//       "GET, POST, DELETE, PUT, PATCH, OPTION"
+//    );
+//    res.setHeader("Access-Control-Allow-Methods", "Content-Type, Authorization");
+//    next();
+// });
 
 // cors options while development
 // if client on mode productions or deploy, origin set a valid url client for unblocked cores and policy
@@ -54,6 +54,10 @@ app.use((req, res, next) => {
       res.header(
          "Access-Control-Allow-Headers",
          "Origin, X-Requested-With, Content-Type, Acccept"
+      );
+      res.setHeader(
+         "Access-Control-Allow-Methods",
+         "GET, POST, DELETE, PUT, PATCH, OPTION"
       );
    }
    next();
