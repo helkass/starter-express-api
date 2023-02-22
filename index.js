@@ -26,8 +26,6 @@ app.use(bodyParser.json());
 app.use((req, res, next) => {
    res.setHeader(
       "Access-Control-Allow-Origin",
-      "*",
-      "https://horizon-mern-vercel.vercel.app/",
       "https://horizon-mern-vercel-git-main-helkass.vercel.app/"
    );
    res.setHeader(
