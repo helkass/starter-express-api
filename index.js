@@ -29,11 +29,15 @@ app.use((req, res, next) => {
       "*",
       "https://horizon-mern-vercel-git-main-helkass.vercel.app/"
    );
+   res.setHeader("Access-Control-Allow-Credentials", true);
    res.setHeader(
       "Access-Control-Allow-Methods",
       "GET, POST, DELETE, PUT, PATCH, OPTION"
    );
-   res.setHeader("Access-Control-Allow-Methods", "Content-Type, Authorization");
+   res.setHeader(
+      "Access-Control-Allow-Methods",
+      "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
+   );
    next();
 });
 
