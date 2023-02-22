@@ -30,7 +30,7 @@ const createItem = async (req, res) => {
                res.status(400).json({
                   status: false,
                   message: err.message,
-               });
+               }) && console.log(err);
             res.status(201).json(data);
          }
       );

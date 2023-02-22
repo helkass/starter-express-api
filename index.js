@@ -29,7 +29,7 @@ app.use((req, res, next) => {
       "*",
       "https://horizon-mern-vercel-git-main-helkass.vercel.app/"
    );
-   res.setHeader("Access-Control-Allow-Credentials", true);
+   // res.setHeader("Access-Control-Allow-Credentials", true);
    res.setHeader(
       "Access-Control-Allow-Methods",
       "GET, POST, DELETE, PUT, PATCH, OPTION"
@@ -45,21 +45,20 @@ app.use((req, res, next) => {
 // if client on mode productions or deploy, origin set a valid url client for unblocked cores and policy
 // * all data cant used method
 const corsOptions = {
-   origin: ["https://horizon-mern-vercel-git-main-helkass.vercel.app/", "*"],
+   // origin: ["https://horizon-mern-vercel-git-main-helkass.vercel.app/", "*"],
+   origin: "*",
    optionSuccessStatus: 200,
-   Credential: true,
 };
 
 // handling permission and policy
 app.use(cors(corsOptions));
 
 // handling file for request
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: "100mb" }));
 app.use(
    bodyParser.urlencoded({
-      limit: "500mb",
+      limit: "100mb",
       extended: true,
-      parameterLimit: 5000000,
    })
 );
 
