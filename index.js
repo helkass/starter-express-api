@@ -23,45 +23,35 @@ mongoose
 
 app.use(bodyParser.json());
 
-// app.use((req, res, next) => {
-//    res.setHeader(
-//       "Access-Control-Allow-Origin",
-//       "*"
-//       // "https://horizon-mern-vercel.vercel.app/"
-//    );
-//    res.setHeader(
-//       "Access-Control-Allow-Methods",
-//       "GET, POST, DELETE, PUT, PATCH, OPTION"
-//    );
-//    res.setHeader("Access-Control-Allow-Methods", "Content-Type, Authorization");
-//    next();
-// });
+app.use((req, res, next) => {
+   res.setHeader(
+      "Access-Control-Allow-Origin",
+      "*",
+      "https://horizon-mern-vercel.vercel.app/",
+      "https://horizon-mern-vercel-git-main-helkass.vercel.app/"
+   );
+   res.setHeader(
+      "Access-Control-Allow-Methods",
+      "GET, POST, DELETE, PUT, PATCH, OPTION"
+   );
+   res.setHeader("Access-Control-Allow-Methods", "Content-Type, Authorization");
+   next();
+});
 
 // cors options while development
 // if client on mode productions or deploy, origin set a valid url client for unblocked cores and policy
 // * all data cant used method
-const corsOptions = [
-   "https://horizon-mern-vercel.vercel.app/",
-   "https://horizon-mern-vercel-git-main-helkass.vercel.app/",
-];
+const corsOptions = {
+   origin: [
+      "https://horizon-mern-vercel.vercel.app/",
+      "https://horizon-mern-vercel-git-main-helkass.vercel.app/",
+      "*",
+   ],
+   optionSuccessStatus: 200,
+};
 
 // handling permission and policy
-// app.use(cors(corsOptions));
-
-app.use((req, res, next) => {
-   if (corsOptions.indexOf(req.headers.origin) !== -1) {
-      res.header("Access-Control-Allow-Origin", req.headers.origin);
-      res.header(
-         "Access-Control-Allow-Headers",
-         "Origin, X-Requested-With, Content-Type, Acccept"
-      );
-      res.setHeader(
-         "Access-Control-Allow-Methods",
-         "GET, POST, DELETE, PUT, PATCH, OPTION"
-      );
-   }
-   next();
-});
+app.use(cors(corsOptions));
 
 // handling file for request
 app.use(bodyParser.json());
