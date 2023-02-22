@@ -47,6 +47,7 @@ app.use((req, res, next) => {
 const corsOptions = {
    origin: ["https://horizon-mern-vercel-git-main-helkass.vercel.app/", "*"],
    optionSuccessStatus: 200,
+   Credential: true,
 };
 
 // handling permission and policy
