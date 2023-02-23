@@ -13,7 +13,7 @@ router.get("/", getAllCustomers);
 
 router.post("/register", createCustomer);
 
-router.put("/update/:id", updateCustomer);
+router.patch("/update/:id", updateCustomer);
 
 router.get("/:id", getCustomer);
 
