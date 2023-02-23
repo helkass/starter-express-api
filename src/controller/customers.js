@@ -118,20 +118,17 @@ const loginCustomer = async (req, res) => {
 // UPDATE CUSTOMER
 const updateCustomer = async (req, res) => {
    const formData = req.body;
+   const { id } = req.params;
 
    try {
-      await Customer.findByIdAndUpdate(
-         req.body._id,
-         formData,
-         function (err, doc) {
-            if (err)
-               return res.status(400).json({ message: "update data failed!" });
-            res.status(201).json({
-               status: true,
-               message: "Update Profile Successfully!",
-            });
-         }
-      );
+      await Customer.findByIdAndUpdate(id, formData, function (err, doc) {
+         if (err)
+            return res.status(400).json({ message: "update data failed!" });
+         res.status(201).json({
+            status: true,
+            message: "Update Profile Successfully!",
+         });
+      });
    } catch (error) {
       res.status(500).json({ message: "something went wrong!" });
    }
