@@ -6,11 +6,14 @@ const {
    loginCustomer,
    deleteCustomer,
    getCustomer,
+   updateCustomer,
 } = require("../controller/customers");
 
 router.get("/", getAllCustomers);
 
 router.post("/register", createCustomer);
+
+router.put("/update", updateCustomer);
 
 router.get("/:id", getCustomer);
 
