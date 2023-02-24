@@ -13,7 +13,7 @@ const ItemSchema = new mongoose.Schema(
          required: true,
          maxLength: 200,
       },
-      img: {
+      image: {
          public_id: {
             type: String,
             required: true,

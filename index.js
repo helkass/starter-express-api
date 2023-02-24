@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cors = require("cors");
+const bodyParser = require("body-parser");
 
 const orderRoute = require("./src/routes/order");
 const adminRoute = require("./src/routes/admin");
@@ -9,7 +10,6 @@ const blogRoute = require("./src/routes/blog");
 const itemRoute = require("./src/routes/item");
 const customerRoute = require("./src/routes/customer");
 const galleryRoute = require("./src/routes/gallery");
-const bodyParser = require("body-parser");
 
 const app = express();
 dotenv.config();
@@ -23,19 +23,19 @@ mongoose
 
 app.use(bodyParser.json());
 
-app.use((req, res, next) => {
-   res.setHeader("Access-Control-Allow-Origin", "*");
-   // res.setHeader("Access-Control-Allow-Credentials", true);
-   res.setHeader(
-      "Access-Control-Allow-Methods",
-      "GET, POST, DELETE, PUT, PATCH, OPTION"
-   );
-   res.setHeader(
-      "Access-Control-Allow-Methods",
-      "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
-   );
-   next();
-});
+// app.use((req, res, next) => {
+//    res.setHeader("Access-Control-Allow-Origin", "*");
+//    // res.setHeader("Access-Control-Allow-Credentials", true);
+//    res.setHeader(
+//       "Access-Control-Allow-Methods",
+//       "GET, POST, DELETE, PUT, PATCH, OPTION"
+//    );
+//    res.setHeader(
+//       "Access-Control-Allow-Methods",
+//       "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
+//    );
+//    next();
+// });
 
 // cors options while development
 // if client on mode productions or deploy, origin set a valid url client for unblocked cores and policy

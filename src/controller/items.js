@@ -3,37 +3,27 @@ const cloudinary = require("../config/cloudinary");
 
 // CREATE ITEM
 const createItem = async (req, res) => {
-   const { title, desc, img, medium, large, size, price, type } = req.body;
-
+   const form = req.body;
    try {
-      const handleImage = await cloudinary.uploader.upload(img, {
+      const handleImage = await cloudinary.uploader.upload(form.image, {
          folder: "products",
          // width: 250,
          // crop: "scale"
       });
-      Item.create(
-         {
-            title,
-            desc,
-            img: {
-               public_id: handleImage.public_id,
-               urlImage: handleImage.secure_url,
-            },
-            medium,
-            large,
-            size,
-            price,
-            type,
+      const response = await Item.create({
+         title: form?.title,
+         desc: form?.desc,
+         image: {
+            public_id: handleImage.public_id,
+            url: handleImage.url,
          },
-         function (err, data) {
-            if (err)
-               res.status(400).json({
-                  status: false,
-                  message: err.message,
-               }) && console.log(err);
-            res.status(201).json(data);
-         }
-      );
+         medium: form?.medium,
+         large: form?.large,
+         size: form?.size,
+         price: form?.large,
+         type: form?.type,
+      });
+      res.status(201).json({ success: true, response });
    } catch (error) {
       res.status(500).json({ message: "Something went wrong!" });
    }
