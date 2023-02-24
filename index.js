@@ -17,11 +17,12 @@ const PORT = process.env.PORT || 4000;
 
 mongoose.set("strictQuery", false);
 mongoose
-   .connect(process.env.MONGO_URL)
+   .connect(process.env.MONGO_URL, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+   })
    .then(() => console.log("db connected"))
    .catch((err) => console.log(err));
-
-app.use(bodyParser.json());
 
 // app.use((req, res, next) => {
 //    res.setHeader("Access-Control-Allow-Origin", "*");
@@ -47,7 +48,7 @@ const corsOptions = {
 };
 
 // handling permission and policy
-app.use(cors(corsOptions));
+app.use(cors());
 
 // handling file for request
 app.use(bodyParser.json({ limit: "100mb" }));
