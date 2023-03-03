@@ -1,4 +1,5 @@
 const Blog = require("../models/blog");
+const cloudinary = require("../config/cloudinary");
 
 // GET ALLL BLOGS
 const getAllBlogs = async (req, res) => {
@@ -11,17 +12,34 @@ const getAllBlogs = async (req, res) => {
 };
 
 // CREATE BLOG
-const createBlog = (req, res) => {
+const createBlog = async (req, res) => {
    const formData = req.body;
 
    try {
-      Blog.create(formData, function (err, data) {
-         if (err) {
-            res.status(400).json({ message: "something went wrong!" });
-         } else {
-            res.status(201).json(data);
-         }
+      const handleImage = await cloudinary.uploader.upload(form.image, {
+         folder: "products",
+         width: 200,
+         height: 220,
+         crop: "scale",
       });
+      Blog.create(
+         {
+            title: formData.title,
+            article: formData.article,
+            image: {
+               public_id: handleImage.public_id,
+               url: handleImage.url,
+            },
+            writer: formData.writer,
+         },
+         function (err, data) {
+            if (err) {
+               res.status(400).json({ message: "something went wrong!" });
+            } else {
+               res.status(201).json(data);
+            }
+         }
+      );
    } catch (error) {
       res.status(500).json({ message: "something went wrong!" });
    }

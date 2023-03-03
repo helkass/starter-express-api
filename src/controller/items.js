@@ -7,20 +7,21 @@ const createItem = async (req, res) => {
    try {
       const handleImage = await cloudinary.uploader.upload(form.image, {
          folder: "products",
-         width: 250,
+         width: 200,
+         height: 220,
          crop: "scale",
       });
       const response = await Item.create({
          title: form?.title,
          desc: form?.desc,
          image: {
-            public_id: handleImage.public_id,
-            url: handleImage.url,
+            public_id: handleImage?.public_id,
+            url: handleImage?.url,
          },
          medium: form?.medium,
          large: form?.large,
          size: form?.size,
-         price: form?.large,
+         price: form?.price,
          type: form?.type,
       });
       res.status(201).json({ success: true, response });

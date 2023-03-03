@@ -1,4 +1,5 @@
 const Gallery = require("../models/gallery");
+const cloudinary = require("../config/cloudinary");
 
 // GET ALL GALLERIES
 const getAllGalleries = async (req, res) => {
@@ -14,15 +15,29 @@ const getAllGalleries = async (req, res) => {
 };
 
 // CREATE
-const createGallery = (req, res) => {
+const createGallery = async (req, res) => {
    const formData = req.body;
 
    try {
-      Gallery.create(formData, function (err, data) {
-         if (err) return res.status(400).json({ message: err.message });
-
-         res.status(201).json(data);
+      const handleImage = await cloudinary.uploader.upload(form.image, {
+         folder: "products",
+         width: 200,
+         height: 220,
+         crop: "scale",
       });
+      Gallery.create(
+         {
+            title: formData.title,
+            desc: formData.desc,
+            writer: formData.writer,
+            image: { public_id: handleImage?.public_id, url: handleImage.url },
+         },
+         function (err, data) {
+            if (err) return res.status(400).json({ message: err.message });
+
+            res.status(201).json(data);
+         }
+      );
    } catch (error) {
       res.status(500).json({ message: "Something went Wrong!" });
    }
