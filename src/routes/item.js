@@ -6,16 +6,16 @@ const {
    deleteItem,
    editItem,
 } = require("../controller/items");
-const { verifyToken } = require("../middleware/verifyToken");
+const { verifyTokenAndAuthorization } = require("../middleware/verifyToken");
 
 router.get("/", getAllItems);
 
 router.get("/:id", getItemById);
 
-router.post("/create", createItem);
+router.post("/create", verifyTokenAndAuthorization, createItem);
 
-router.put("/edit/:id", editItem);
+router.put("/edit/:id", verifyTokenAndAuthorization, editItem);
 
-router.delete("/delete/:id", deleteItem);
+router.delete("/delete/:id", verifyTokenAndAuthorization, deleteItem);
 
 module.exports = router;

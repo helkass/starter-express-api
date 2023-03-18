@@ -94,7 +94,7 @@ const loginCustomer = async (req, res) => {
       const checkPassword = originalPassword !== req.body.password;
 
       if (checkPassword) {
-         return res.sendStatus(404).send({
+         return res.status(404).json({
             message: "Invalid password",
          });
       }
@@ -141,7 +141,7 @@ const deleteCustomer = async (req, res) => {
    const id = req.params.id;
 
    try {
-      const response = await Customer.findByIdAndDelete(id);
+      await Customer.findByIdAndDelete(id);
       res.json({ message: "Delete successfully!" });
    } catch (error) {
       res.status(500).json({ message: "Something went wrong!" });

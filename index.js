@@ -24,25 +24,11 @@ mongoose
    .then(() => console.log("db connected"))
    .catch((err) => console.log(err));
 
-// app.use((req, res, next) => {
-//    res.setHeader("Access-Control-Allow-Origin", "*");
-//    // res.setHeader("Access-Control-Allow-Credentials", true);
-//    res.setHeader(
-//       "Access-Control-Allow-Methods",
-//       "GET, POST, DELETE, PUT, PATCH, OPTION"
-//    );
-//    res.setHeader(
-//       "Access-Control-Allow-Methods",
-//       "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
-//    );
-//    next();
-// });
-
 // cors options while development
-// if client on mode productions or deploy, origin set a valid url client for unblocked cores and policy
+// if client on mode productions or deploy, origin set a valid url client for unblocked cores and privacy policy
 // * all data cant used method
 const corsOptions = {
-   // origin: ["https://horizon-mern-vercel-git-main-helkass.vercel.app/", "*"],
+   // origin: "https://horizon-mern-vercel.vercel.app/",
    origin: "*",
    optionSuccessStatus: 200,
 };
@@ -67,10 +53,7 @@ app.get("/", (req, res) => {
    res.send("server is running!");
 });
 
-//Routes go here
-// app.all('*', (req,res) => {
-//   res.json({"every thing":"is awesome"})
-// })
+// if you running on developement please shuttingdown middleware verifyToken
 
 app.use("/api/order", orderRoute);
 app.use("/api/admin", adminRoute);

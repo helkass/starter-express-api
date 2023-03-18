@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const { verifyTokenAndAuthorization } = require("../middleware/verifyToken");
 const {
    getAllBlogs,
    createBlog,
@@ -8,10 +9,10 @@ const {
 
 router.get("/", getAllBlogs);
 
-router.post("/create", createBlog);
+router.post("/create", verifyTokenAndAuthorization, createBlog);
 
 router.get("/:id", getBlogById);
 
-router.delete("/delete/:id", deleteBlog);
+router.delete("/delete/:id", verifyTokenAndAuthorization, deleteBlog);
 
 module.exports = router;
