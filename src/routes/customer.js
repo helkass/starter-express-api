@@ -13,7 +13,7 @@ router.get("/", verifyTokenAndAuthorization, getAllCustomers);
 
 router.post("/register", createCustomer);
 
-router.patch("/update/:id", verifyTokenAndAuthorization, updateCustomer);
+router.put("/update/:id", verifyTokenAndAuthorization, updateCustomer);
 
 router.get("/:id", verifyTokenAndAuthorization, getCustomer);
 

@@ -71,7 +71,7 @@ const createOrder = async (req, res) => {
                res.status(201).json(data);
             })
             .catch((err) => {
-               res.status(400), jaon({ message: "Something went wrong!" });
+               res.status(400).json({ message: "Something went wrong!" });
             });
       })
       .catch((err) => {

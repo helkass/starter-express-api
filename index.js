@@ -53,8 +53,6 @@ app.get("/", (req, res) => {
    res.send("server is running!");
 });
 
-// if you running on developement please shuttingdown middleware verifyToken
-
 app.use("/api/order", orderRoute);
 app.use("/api/admin", adminRoute);
 app.use("/api/blog", blogRoute);

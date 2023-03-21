@@ -117,22 +117,24 @@ const loginCustomer = async (req, res) => {
 
 // UPDATE CUSTOMER
 const updateCustomer = async (req, res) => {
-   const formData = req.body;
    const { id } = req.params;
 
+   req.body.password = CryptoJS.AES.encrypt(
+      req.body.password,
+      process.env.SECRET
+   ).toString();
+
    try {
-      await Customer.updateOne(
-         { _id: id },
-         { $set: formData },
-         function (err, doc) {
-            if (err)
-               return res.status(400).json({ message: "update data failed!" });
-            res.status(201).json({
-               status: true,
-               message: "Update Profile Successfully!",
-            });
-         }
+      const updateCustomer = await Customer.findByIdAndUpdate(
+         id,
+         { $set: req.body },
+         { new: true }
       );
+
+      res.status(200).json({
+         status: true,
+         message: "Update Profile Successfully!",
+      });
    } catch (error) {
       res.status(500).json({ message: "something went wrong!" });
    }
