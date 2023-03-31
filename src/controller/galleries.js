@@ -17,30 +17,27 @@ const getAllGalleries = async (req, res) => {
 // CREATE
 const createGallery = async (req, res) => {
    const formData = req.body;
-
+   
    try {
-      const handleImage = await cloudinary.uploader.upload(form.image, {
-         folder: "products",
+      const handleImage = await cloudinary.uploader.upload(formData.image, {
+         folder: "gallery",
          width: 200,
          height: 220,
-         crop: "scale",
-      });
-      Gallery.create(
+       crop: "scale",
+	});
+      const response = await Gallery.create(
          {
             title: formData.title,
             desc: formData.desc,
             writer: formData.writer,
             image: { public_id: handleImage?.public_id, url: handleImage.url },
-         },
-         function (err, data) {
-            if (err) return res.status(400).json({ message: err.message });
-
-            res.status(201).json(data);
-         }
-      );
+		},
+	);
+	  
+	  res.status(201).json({status: true, data: response, message: "gallery has been uploaded!"})
    } catch (error) {
       res.status(500).json({ message: "Something went Wrong!" });
-   }
+	}
 };
 
 // GET BLOG BY ID

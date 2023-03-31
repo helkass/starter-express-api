@@ -61,7 +61,7 @@ const createCustomer = async (req, res) => {
             password: saved.password,
          },
          process.env.SECRET,
-         { expiresIn: "1d" }
+         { expiresIn: "7d" }
       );
 
       const { password, ...others } = saved._doc;
@@ -105,7 +105,7 @@ const loginCustomer = async (req, res) => {
             password: customer.password,
          },
          process.env.SECRET,
-         { expiresIn: "3d" }
+         { expiresIn: "7d" }
       );
 
       const { password, ...others } = customer._doc;

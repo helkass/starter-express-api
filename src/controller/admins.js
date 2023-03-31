@@ -65,7 +65,7 @@ const loginAdmin = async (req, res) => {
             id: admin._id,
          },
          process.env.SECRET,
-         { expiresIn: "1d" }
+         { expiresIn: "7d" }
       );
 
       const { password, ...others } = admin._doc;

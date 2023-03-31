@@ -15,11 +15,9 @@ const GallerySchema = new mongoose.Schema(
       image: {
          public_id: {
             type: String,
-            required: false,
          },
          url: {
             type: String,
-            required: false,
          },
       },
       writer: {

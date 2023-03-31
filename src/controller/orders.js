@@ -4,7 +4,7 @@ const coreApi = require("../config/midtrans");
 // GET ALL ORDERS
 const getOrders = async (req, res) => {
    try {
-      const response = await Order.find();
+      const response = await Order.find().sort({createdAt: -1});
 
       // FORMAT RESPONSE_MIDTRANS FROM JSON TO STRING
       const newData = response.map((item) => {
@@ -19,7 +19,7 @@ const getOrders = async (req, res) => {
             updatedAt: item.updatedAt,
          };
       });
-      res.json(newData);
+      res.status(200).json(newData);
    } catch (error) {
       res.status(500).json({ message: "Something went wrong!" });
    }
