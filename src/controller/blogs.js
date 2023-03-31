@@ -16,7 +16,7 @@ const createBlog = async (req, res) => {
    const formData = req.body;
 
    try {
-      const handleImage = await cloudinary.uploader.upload(form.image, {
+      const handleImage = await cloudinary.uploader.upload(formData.image, {
          folder: "products",
          width: 200,
          height: 220,
@@ -32,14 +32,9 @@ const createBlog = async (req, res) => {
             },
             writer: formData.writer,
          },
-         function (err, data) {
-            if (err) {
-               res.status(400).json({ message: "something went wrong!" });
-            } else {
-               res.status(201).json(data);
-            }
-         }
       );
+	  
+	  	res.status(201).json({status: true, data: response, message: "blog has been uploaded!"})
    } catch (error) {
       res.status(500).json({ message: "something went wrong!" });
    }
