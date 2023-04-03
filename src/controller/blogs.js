@@ -18,8 +18,6 @@ const createBlog = async (req, res) => {
    try {
       const handleImage = await cloudinary.uploader.upload(formData.image, {
          folder: "products",
-         width: 200,
-         height: 220,
          crop: "scale",
       });
       Blog.create(
