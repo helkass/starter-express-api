@@ -67,8 +67,9 @@ const createOrder = async (req, res) => {
          };
 
          Order.create(dataOrder)
-		
-	  res.status(201).json({message: "transaction success",})
+            .then((data) => {
+               res.status(201).json(data);
+            })
       })
       .catch((err) => {
          res.status(400).json({ message: "failed order products" });
