@@ -9,7 +9,7 @@ const getAllCustomers = async (req, res) => {
 
       res.json(customers);
    } catch (error) {
-      res.status(500).json({ message: "Something went wrong!" });
+      res.status(500);
    }
 };
 
@@ -22,7 +22,7 @@ const getCustomer = async (req, res) => {
 
       res.status(200).json(customer);
    } catch (error) {
-      res.status(500).json({ message: "Something went wrong!" });
+      res.status(500);
    }
 };
 
@@ -67,9 +67,7 @@ const createCustomer = async (req, res) => {
       const { password, ...others } = saved._doc;
       res.status(201).json({ ...others, accessToken });
    } catch (error) {
-      res.status(500).json({
-         message: "Something went wrong!",
-      });
+      res.status(500);
    }
 };
 
@@ -111,7 +109,7 @@ const loginCustomer = async (req, res) => {
       const { password, ...others } = customer._doc;
       res.status(200).json({ ...others, accessToken, status: true });
    } catch (error) {
-      res.status(500).json({ message: "something went wrong!" });
+      res.status(500);
    }
 };
 

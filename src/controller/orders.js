@@ -1,10 +1,13 @@
 const Order = require("../models/order");
+const Customer = require("../models/customer");
 const coreApi = require("../config/midtrans");
+const nodemailer = require("nodemailer");
+const Mailgen = require("mailgen");
 
 // GET ALL ORDERS
 const getOrders = async (req, res) => {
    try {
-      const response = await Order.find().sort({createdAt: -1});
+      const response = await Order.find().sort({ createdAt: -1 });
 
       // FORMAT RESPONSE_MIDTRANS FROM JSON TO STRING
       const newData = response.map((item) => {
@@ -21,7 +24,7 @@ const getOrders = async (req, res) => {
       });
       res.status(200).json(newData);
    } catch (error) {
-      res.status(500).json({ message: "Something went wrong!" });
+      res.status(500);
    }
 };
 
@@ -48,12 +51,14 @@ const getOrderByCustomer = async (req, res) => {
       });
       res.json(newData);
    } catch (error) {
-      res.status(500).json({ message: "Something went wrong!" });
+      res.status(500);
    }
 };
 // CREATE ORDER AND SEND DATA TO MIDTRANS SERVER
 const createOrder = async (req, res) => {
    const formData = req.body;
+
+   let customer = await Customer.findById(formData.customerId);
 
    coreApi
       .charge(formData)
@@ -66,13 +71,25 @@ const createOrder = async (req, res) => {
             response_midtrans: JSON.stringify(chargeResponse),
          };
 
-         Order.create(dataOrder)
-            .then((data) => {
-               res.status(201).json(data);
-            })
+         Order.create(dataOrder).then((data) => {
+            const midtrans = JSON.parse(data.response_midtrans);
+            let formatMessageMail = {
+               products: formData.products,
+               customer_name: formData.customer_name,
+               customer_email: customer.email,
+               gross_amount: midtrans?.gross_amount,
+               order_id: midtrans?.order_id,
+               payment_type: formData.payment_type.toString().replace("_", " "),
+            };
+
+            // send message to customer email
+            createEmailNotification(formatMessageMail);
+
+            res.status(201);
+         });
       })
       .catch((err) => {
-         res.status(400).json({ message: "failed order products" });
+         res.status(400);
       });
 };
 
@@ -155,6 +172,71 @@ const deleteOrder = async (req, res) => {
    } catch (error) {
       res.status(500).json({ message: "Something went wrong!" });
    }
+};
+
+// SEND EMAIL MESSAGE AFTER CHARGE
+const createEmailNotification = async ({ ...params }) => {
+   const {
+      products,
+      customer_email,
+      gross_amount,
+      order_id,
+      payment_type,
+      customer_name,
+   } = params;
+   let config = {
+      service: "gmail",
+      auth: {
+         user: process.env.EMAIL,
+         pass: process.env.PASSEMAIL,
+      },
+   };
+
+   let transporter = new nodemailer.createTransport(config);
+
+   let MailGenerator = new Mailgen({
+      theme: "default",
+      product: {
+         name: "Horizon Coffee",
+         link: "https://mailgen.js/",
+      },
+   });
+
+   let response = {
+      body: {
+         name: customer_name,
+         intro: [
+            "Selamat order kamu telah berhasil dibuat.",
+            `Order Id : ${order_id}`,
+         ],
+         table: {
+            data: products.map((product) => ({
+               item: product?.product_name,
+               quantity: product?.quantity,
+            })),
+            columns: {
+               customAlignment: {
+                  quantity: "center",
+               },
+            },
+         },
+         outro: [
+            `Metode pembayaran : ${payment_type}`,
+            `Total pembayaran : Rp.${gross_amount}`,
+         ],
+      },
+   };
+
+   let mail = MailGenerator.generate(response);
+
+   let message = {
+      from: process.env.EMAIL,
+      to: customer_email,
+      subject: "Detail Order",
+      html: mail,
+   };
+
+   transporter.sendMail(message);
 };
 
 module.exports = {

@@ -44,7 +44,9 @@ const loginAdmin = async (req, res) => {
    try {
       const admin = await Admin.findOne({ email: req.body.email });
 
-      !admin && res.status(401).json({ error: "email already exist!" });
+      if (!admin) {
+         return res.status(401);
+      }
 
       // hashing
       const hashedPassword = CryptoJS.AES.decrypt(
@@ -57,8 +59,9 @@ const loginAdmin = async (req, res) => {
       const inputPassword = req.body.password;
 
       // compare password
-      originalPassword != inputPassword &&
-         res.status(401).json("Wrong Password");
+      if (originalPassword != inputPassword) {
+         return res.status(402);
+      }
 
       const accessToken = jwt.sign(
          {
