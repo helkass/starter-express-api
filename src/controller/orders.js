@@ -18,6 +18,7 @@ const getOrders = async (req, res) => {
             products: item.products,
             response_midtrans: JSON.parse(item.response_midtrans),
             status: item.status,
+            review: item.review,
             createdAt: item.createdAt,
             updatedAt: item.updatedAt,
          };
@@ -45,6 +46,7 @@ const getOrderByCustomer = async (req, res) => {
             products: item.products,
             response_midtrans: JSON.parse(item.response_midtrans),
             status: item.status,
+            review: item.review,
             createdAt: item.createdAt,
             updatedAt: item.updatedAt,
          };
@@ -67,6 +69,7 @@ const createOrder = async (req, res) => {
             _id: chargeResponse.order_id,
             customerId: formData.customerId,
             customer_name: formData?.customer_name,
+            review: formData?.review,
             products: formData.products,
             response_midtrans: JSON.stringify(chargeResponse),
          };
@@ -85,7 +88,7 @@ const createOrder = async (req, res) => {
             // send message to customer email
             createEmailNotification(formatMessageMail);
 
-            res.status(201);
+            res.status(201).json({ message: "Order has been created" });
          });
       })
       .catch((err) => {
@@ -128,6 +131,11 @@ const updateStatusProccessOrder = async (req, res) => {
       .catch((err) => res.send(err));
 };
 
+// update review order => true || after review update this
+const updateStatusReviewOrder = async (id) => {
+   await Order.findByIdAndUpdate(id, { review: true });
+};
+
 // CHECK ORDER STATUS FOR DEVELOPMENT PROJECT
 // UPADTE STATUS AND RESPONSE MIDTRANS WHILE RESPONSE MIDTRANS CHANGE
 const orderStatus = async (req, res) => {
@@ -151,6 +159,7 @@ const orderStatus = async (req, res) => {
                      customer_name: data?.customer_name,
                      response_midtrans: JSON.parse(data.response_midtrans),
                      status: data.status,
+                     review: data.review,
                      createdAt: data.createdAt,
                      updatedAt: data.updatedAt,
                   };
@@ -247,4 +256,5 @@ module.exports = {
    deleteOrder,
    getOrderByCustomer,
    updateStatusProccessOrder,
+   updateStatusReviewOrder,
 };

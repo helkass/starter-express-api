@@ -10,6 +10,7 @@ const blogRoute = require("./src/routes/blog");
 const itemRoute = require("./src/routes/item");
 const customerRoute = require("./src/routes/customer");
 const galleryRoute = require("./src/routes/gallery");
+const reviewRoute = require("./src/routes/review");
 
 const app = express();
 dotenv.config();
@@ -59,3 +60,4 @@ app.use("/api/blog", blogRoute);
 app.use("/api/item", itemRoute);
 app.use("/api/customer", customerRoute);
 app.use("/api/gallery", galleryRoute);
+app.use("/api/review", reviewRoute);

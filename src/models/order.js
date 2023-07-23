@@ -36,6 +36,10 @@ const OrderSchema = new mongoose.Schema(
          type: String,
          default: "non-processed",
       },
+      review: {
+         type: Boolean,
+         default: false,
+      },
    },
    { timestamps: true }
 );
